@@ -1,0 +1,4 @@
+asarPy==1.0.1
+keyboard==0.13.5
+numpy==2.2.2
+opencv-python==4.11.0.86
