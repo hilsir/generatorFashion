@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from dateModels import data
 from auxTools import openFileAnswers, openFileImage
-from logic import forwardPass, error, backWeights, backNeuron, normalize, normalizeRes, updateOffset, convolution, sigmoid, maxPooling
+from logic import forwardPass, error, backWeights, backNeuron, normalize, normalizeRes, updateOffset, convolution, sigmoid, maxPooling, multiFilter
 from settings import model, training, era
 
 if training:
@@ -29,25 +29,37 @@ answers = openFileAnswers(filenameIdx1)
 
 # Загрузка всех массивов
 filters1 = data()['filters1']
+filters2 = data()['filters2']
 fOffset1 = data()['fOffset1']
+fOffset2 = data()['fOffset2']
 
 activationLayer1 = []
 Pooling1 = []
+activationLayer2 = []
+
 # Применение первых фильтров
 for f in range(filters1.shape[0]):
     activationLayer1.append(convolution(images[0],filters1[f],fOffset1[f],1))
+
 # Пулинг
 for f in range(filters1.shape[0]):
     Pooling1.append(maxPooling(activationLayer1[f],2,2))
 
+# двойныеп фильтры
+for canal in range(filters2.shape[0]):
+    for f in range(filters2.shape[1]):
+        activationLayer2.append([canal],multiFilter(Pooling1[canal],filters2[canal][f],fOffset2[canal][f],1))
 
 
-# print(Pooling1[0])
-plt.imshow(Pooling1[0], cmap='gray')  # cmap='gray' для черно-белого изображения
+# print(activationLayer2[1])
+# plt.imshow(Pooling1[0], cmap='gray')  # cmap='gray' для черно-белого изображения
 
 plt.show()
 
 np.savez_compressed(model, 
-        filters1 = filters1
+        filters1 = filters1,
+        filters2 = filters2,
+        fOffset1 = fOffset1,
+        fOffset2 = fOffset2,
         # offsetOutput = offsetOutput
         )

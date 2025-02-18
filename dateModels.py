@@ -12,7 +12,8 @@ def data():
         # Первый фильтр
         filters1 = np.random.randn(2, 5, 5) / np.sqrt(5)
         fOffset1 = np.random.randn(2)
-
+        filters2 = np.random.randn(2, 2, 2, 3, 3)
+        fOffset2 = np.random.randn(2, 2)
         #Входной слой весов (делим на корень чтобы умекньшить сгенерированые веса (хз gpt порекомендовал))
         # inputWeights = np.random.randn(784, 784)/ np.sqrt(784)
         # weightsLayer_1 = np.random.randn(784, 128)/ np.sqrt(784)
@@ -28,7 +29,9 @@ def data():
         # Сохраняем все массивы в одном файле
         np.savez_compressed(model,
         filters1 = filters1, 
-        fOffset1 = fOffset1,            
+        filters2 = filters2,
+        fOffset1 = fOffset1,     
+        fOffset2 = fOffset2,       
         # inputWeights = inputWeights,
         # weightsLayer_1 = weightsLayer_1, 
         # weightsLayer_2 = weightsLayer_2,

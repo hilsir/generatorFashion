@@ -42,7 +42,7 @@ def sigmoid(x):
 
 # Применение фильтров
 # stride шаг цикла. padding увеличить массив по краям
-def convolution(image, filter, offset, stride=1, padding=0):
+def convolution(image, filter, offset=0, stride=0, padding=0):
     
     # Добавляем паддинг к изображению
     if padding > 0:
@@ -82,5 +82,20 @@ def maxPooling(image, poolSize, stride):
             # Берем максимальное значение из текущего региона
             region = image[startH:endH, startW:endW]
             output[h, w] = np.max(region)
-            
+
     return output
+
+def multiFilter(images, filters, offset, stride, padding=0):
+        
+        imageHeight, imageWidth  = images.shape
+        # print(filters[1].shape)
+        filterHeight, filterWidth = filters[1].shape
+        outputHeight = (imageHeight - filterHeight) // stride + 1
+        outputWidth = (imageWidth - filterWidth) // stride + 1
+        filterSum = np.zeros((outputHeight, outputWidth))
+        
+        for f in range(filters.shape[0]):
+            # print("test",filters.shape[0])
+            filterSum = filterSum + convolution(images,filters[f], 0,stride)
+        return filterSum
+        # print(filterSum)
