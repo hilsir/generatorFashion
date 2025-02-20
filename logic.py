@@ -85,17 +85,31 @@ def maxPooling(image, poolSize, stride):
 
     return output
 
-def multiFilter(images, filters, offset, stride, padding=0):
-        
-        imageHeight, imageWidth  = images.shape
-        # print(filters[1].shape)
-        filterHeight, filterWidth = filters[1].shape
-        outputHeight = (imageHeight - filterHeight) // stride + 1
-        outputWidth = (imageWidth - filterWidth) // stride + 1
-        filterSum = np.zeros((outputHeight, outputWidth))
-        
-        for f in range(filters.shape[0]):
-            # print("test",filters.shape[0])
-            filterSum = filterSum + convolution(images,filters[f], 0,stride)
-        return filterSum
-        # print(filterSum)
+# не работает!!!!!!!!!!!!!!!!!!!!!!
+def multiFilter(images, filters, offset, stride = 1):
+    num_images, height, width = images.shape
+    num_filters, filter_height, filter_width = filters.shape
+    
+    # Выходной размер
+    out_height = (height - filter_height) // stride + 1
+    out_width = (width - filter_width) // stride + 1
+    
+    # Массив для хранения результатов
+    output = np.zeros((num_images, out_height, out_width, num_filters))
+    
+    # Применение каждого фильтра ()
+    for i in range(num_images):
+        for f in range(num_filters):
+            for y in range(0, height - filter_height + 1, stride):
+                for x in range(0, width - filter_width + 1, stride):
+                    # Выбираем участок изображения, соответствующий размеру фильтра
+                    region = images[i, y:y + filter_height, x:x + filter_width]
+                    
+                    # Вычисляем свёртку (поэлементное умножение и суммирование)
+                    conv_result = np.sum(region * filters[f])
+                    
+                    # Записываем результат в выходной массив и добавляем сдвиг
+                    output[y // stride, x // stride] = conv_result + offset
+    return output
+
+

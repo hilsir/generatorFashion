@@ -12,7 +12,9 @@ def data():
         # Первый фильтр
         filters1 = np.random.randn(2, 5, 5) / np.sqrt(5)
         fOffset1 = np.random.randn(2)
+        # (канал,фильтр,второй фильтр,размерность фильтра x,размерность фильтра y)
         filters2 = np.random.randn(2, 2, 2, 3, 3)
+        # (канал,фильтр)
         fOffset2 = np.random.randn(2, 2)
         #Входной слой весов (делим на корень чтобы умекньшить сгенерированые веса (хз gpt порекомендовал))
         # inputWeights = np.random.randn(784, 784)/ np.sqrt(784)

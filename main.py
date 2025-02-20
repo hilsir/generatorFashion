@@ -41,18 +41,22 @@ activationLayer2 = []
 for f in range(filters1.shape[0]):
     activationLayer1.append(convolution(images[0],filters1[f],fOffset1[f],1))
 
+activationLayer1 = np.array(activationLayer1)
+
 # Пулинг
 for f in range(filters1.shape[0]):
     Pooling1.append(maxPooling(activationLayer1[f],2,2))
 
+Pooling1 = np.array(Pooling1)
+
 # двойныеп фильтры
 for canal in range(filters2.shape[0]):
-    for f in range(filters2.shape[1]):
-        activationLayer2.append([canal],multiFilter(Pooling1[canal],filters2[canal][f],fOffset2[canal][f],1))
+    for filters in range(filters2.shape[1]):
+        activationLayer2.append(multiFilter(Pooling1,filters2[canal][filters],fOffset2[canal][filters]))
 
 
-# print(activationLayer2[1])
-# plt.imshow(Pooling1[0], cmap='gray')  # cmap='gray' для черно-белого изображения
+print(activationLayer2[1])
+# plt.imshow(activationLayer2[1], cmap='gray')  # cmap='gray' для черно-белого изображения
 
 plt.show()
 
